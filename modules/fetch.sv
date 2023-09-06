@@ -8,8 +8,8 @@ module fetch
 );
 
 	// variables internas (temporales)
-	logic [63:0] mux_out, add_out;
-
+	logic [63:0] add_out;
+	logic [63:0] mux_out; 
 	// constante 4 para el adder
 	logic [63:0] four = 'd4;
 	
@@ -31,7 +31,7 @@ module fetch
 	adder #(.N(64)) Add(
 		.a(imem_addr_F), 
 		.b(four), 
-		.y(mux_out)
+		.y(add_out)
 	);
 
 endmodule 

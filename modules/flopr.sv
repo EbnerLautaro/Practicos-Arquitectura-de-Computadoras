@@ -1,12 +1,12 @@
 // FLOP_R
 
 module flopr 
-#(parameter width=64) 
+#(parameter N=64) 
 (	
 	input logic clk, 
 	input logic reset, 
-	input logic [width-1:0] d, 
-	output logic [width-1:0] q
+	input logic [N-1:0] d, 
+	output logic [N-1:0] q
 );
 	
 	// reset asincrono
