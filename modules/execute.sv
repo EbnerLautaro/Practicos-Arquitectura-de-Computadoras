@@ -1,30 +1,31 @@
 // EXECUTE
 
 module execute
+#(parameter N = 64)
 (
 	input logic AluSrc,
 	input logic [3:0] AluControl,
-	input logic [63:0] PC_E, signImm_E, readData1_E, readData2_E,
-	output logic [63:0] PCBranch_E, aluResult_E, writeData_E,
+	input logic [N-1:0] PC_E, signImm_E, readData1_E, readData2_E,
+	output logic [N-1:0] PCBranch_E, aluResult_E, writeData_E,
 	output logic zero_E
 );
 
 	// variables internas (temporales)
-	logic [63:0] mux_out;
-	logic [63:0] sl2_out;
+	logic [N-1:0] mux_out;
+	logic [N-1:0] sl2_out;
 
-	sl2 #(.N(64)) ShiftLeft2(
+	sl2 #(.N(N)) ShiftLeft2(
 		.a(signImm_E),
 		.y(sl2_out)
 	);
 	
-	adder #(.N(64)) Add(
+	adder #(.N(N)) Add(
 		.a(sl2_out),
 		.b(PC_E),
 		.y(PCBranch_E)
 	);
 	
-	mux2 #(.N(64)) MUX(
+	mux2 #(.N(N)) MUX(
 		.d0(readData2_E),
 		.d1(signImm_E),
 		.s(AluSrc),
@@ -39,9 +40,7 @@ module execute
 		.zero(zero_E)
 	);
 	
-	
-	
-	
+	assign writeData_E = readData2_E;
 
 
 endmodule 
