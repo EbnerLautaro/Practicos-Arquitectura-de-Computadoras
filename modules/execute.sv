@@ -9,12 +9,10 @@ module execute
 	output logic zero_E
 );
 
-	
+	// variables internas (temporales)
 	logic [63:0] mux_out;
 	logic [63:0] sl2_out;
 
-	
-	
 	sl2 #(.N(64)) ShiftLeft2(
 		.a(signImm_E),
 		.y(sl2_out)

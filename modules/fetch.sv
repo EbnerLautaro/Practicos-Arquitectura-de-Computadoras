@@ -11,7 +11,7 @@ module fetch
 	logic [63:0] add_out;
 	logic [63:0] mux_out; 
 	// constante 4 para el adder
-	logic [63:0] four = 'd4;
+	const logic [63:0] four = 'd4;
 	
 	
 	mux2  #(.N(64)) MUX(
