@@ -96,24 +96,29 @@ set_global_assignment -name EDA_TEST_BENCH_FILE tests/flopr_tb.sv -section_id fl
 set_global_assignment -name EDA_TEST_BENCH_FILE tests/alu_tb.sv -section_id alu_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE tests/fetch_tb.sv -section_id fetch_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE tests/processor_tb.sv -section_id processor_tb
-set_global_assignment -name SYSTEMVERILOG_FILE tests/processor_tb.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/memory.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/processor_arm.sv
-set_global_assignment -name VHDL_FILE modules/dmem.vhd
-set_global_assignment -name SYSTEMVERILOG_FILE modules/writeback.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/controller.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/datapath.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/aludec.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/decode.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/sl2.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/signext.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/regfile.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/mux2.sv
 set_global_assignment -name SYSTEMVERILOG_FILE modules/maindec.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/imem.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/flopr.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/fetch.sv
-set_global_assignment -name SYSTEMVERILOG_FILE modules/alu.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/aludec.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/controller.sv
+set_global_assignment -name SYSTEMVERILOG_FILE tests/processor_tb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE modules/adder.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/alu.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/comp_n.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/datapath.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/decode.sv
+set_global_assignment -name VHDL_FILE modules/dmem.vhd
+set_global_assignment -name SYSTEMVERILOG_FILE modules/esync.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/exception.sv
 set_global_assignment -name SYSTEMVERILOG_FILE modules/execute.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/fetch.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/flopr.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/flopr_e.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/imem.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/memory.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/mux2.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/mux4.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/processor_arm.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/regfile.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/signext.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/sl2.sv
+set_global_assignment -name SYSTEMVERILOG_FILE modules/writeback.sv
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
