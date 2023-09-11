@@ -14,18 +14,32 @@
 		- si X9 != 0 -> branch loop
 		- guardo en la pos X0 de memoria el valor de X3
 */
+	ADD		X2, XZR, XZR		// X2 = 0
+	ADD  	X9, X30, XZR
+loop1: 
+	STUR 	X2, [X0, #0]		// WRITE X2 IN X0 ADDR 
+	ADD		X2, X2, X1			// X2 ++
+	ADD 	X0, X0, X8			// X0 += 8
+	SUB 	X9, X9, X1			// X9 --
+	CBZ 	X9, end1			
+	CBZ 	XZR, loop1				
 
+end1:
 	ADD 	X3, XZR, XZR
 	ADD 	X9, X30, XZR
+	ADD		X0, XZR, XZR
 
-loop: 	
+loop2: 	
 	LDUR 	X2, [X0, #0]		// X2 = M[X0]
 	ADD 	X3, X3, X2			// X3 += X2
 	ADD 	X0, X0, X8			// X0 += 8b
 	SUB 	X9, X9, X1			// X9 --
-	CBNZ 	X9, loop			
+	CBZ 	X9, end2			
+	CBZ 	XZR, loop2	
+
+end2:
 	STUR 	X3, [X0, #0]		// M[X0] = X3
 	
 infloop:
-	CBZ xzr, infloop
+	CBZ XZR, infloop
 	

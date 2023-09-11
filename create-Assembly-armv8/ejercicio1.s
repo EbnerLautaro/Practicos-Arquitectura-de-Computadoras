@@ -19,8 +19,11 @@ loop:
 	ADD		X2, X2, X1			// X2 ++
 	ADD 	X0, X0, X8			// X0 += 8
 	SUB 	X9, X9, X1			// X9 --
-	CBNZ 	X9, loop				
+	CBZ 	X9, end				
+	CBZ 	XZR, loop				
+
+end:
 
 infloop:
-	CBZ xzr, infloop
+	CBZ XZR, infloop
 	
