@@ -1,38 +1,15 @@
-// FETCH
+module fetch #(parameter N=64)
+			  (input logic PCSrc_F, clk, reset, EProc_F,
+			   input logic [N-1:0] PCBranch_F, EVAddr_F,
+			   output logic[N-1:0] imem_addr_F, NextPC_F);
 
-module fetch 
-#(parameter N = 64)
-(
-	input logic PCSrc_F, clk, reset,
-	input logic [N-1:0] PCBranch_F,
-	output logic [N-1:0] imem_addr_F
-);
+	logic [N-1:0] PC_out, adder_out, mux1_out, mux2_out;
 
-	// variables internas (temporales)
-	logic [N-1:0] add_out;
-	logic [N-1:0] mux_out; 
-	// constante 4 para el adder
-	const logic [N-1:0] four = 'd4;
-	
-	
-	mux2  #(.N(N)) MUX(
-		.d0(add_out), 
-		.d1(PCBranch_F), 
-		.s(PCSrc_F), 
-		.y(mux_out)
-	);
-	
-	flopr #(.N(N)) PC(
-		.clk(clk), 
-		.reset(reset), 
-		.d(mux_out), 
-		.q(imem_addr_F)
-	);
-	
-	adder #(.N(N)) Add(
-		.a(imem_addr_F), 
-		.b(four), 
-		.y(add_out)
-	);
+	flopr #(N) PC   (clk, reset, mux2_out, PC_out);
+	adder #(N) Add  (PC_out, 64'h4, adder_out);
+	mux2  #(N) MUX1 (adder_out, PCBranch_F, PCSrc_F, mux1_out);
+	mux2  #(N) MUX2 (mux1_out, EVAddr_F, EProc_F, mux2_out);
 
-endmodule 
+	assign imem_addr_F = PC_out;
+	assign NextPC_F = mux1_out;
+endmodule
