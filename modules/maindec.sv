@@ -6,11 +6,10 @@ module maindec
 		input logic reset, // nuevo
 		output logic Reg2Loc, MemtoReg, RegWrite, MemRead, MemWrite, Branch, 
 		output logic NotAnInstr, ERet, // nuevo
-		output logic [1:0] ALUOp, ALUSrc, // modificado
-		output logic [3:0] EStatus // nuevo
+		output logic [1:0] ALUOp, ALUSrc // modificado
 );
 
-	always_comb begin
+	always_comb begin	
 	
 		if (reset) begin 
 			Reg2Loc 	<= 1'b0;
@@ -22,10 +21,10 @@ module maindec
 			ALUOp 		<= 2'b00;
 			ALUSrc		<= 2'b00;
 			ERet		<= 1'b0;
-			EStatus 	<= 4'b0000;
-
+			NotAnInstr  <= 1'b0;
+		end 
 		
-		end else begin 
+		else begin 
 		
 			casez(Op)
 		
@@ -40,7 +39,6 @@ module maindec
 					Branch 		<= 1'b0;
 					ALUOp 		<= 2'b00;
 					ERet		<= 1'b0;
-					EStatus 	<= 4'b0000;
 					NotAnInstr	<= 1'b0;
 				end
 					
@@ -55,7 +53,6 @@ module maindec
 					Branch 		<= 1'b0;
 					ALUOp 		<= 2'b00;
 					ERet		<= 1'b0;
-					EStatus 	<= 4'b0000;
 					NotAnInstr	<= 1'b0;
 				end
 				
@@ -70,7 +67,6 @@ module maindec
 					Branch 		<= 1'b1;
 					ALUOp 		<= 2'b01;
 					ERet		<= 1'b0;
-					EStatus 	<= 4'b0000;
 					NotAnInstr	<= 1'b0;
 				end
 				
@@ -86,13 +82,51 @@ module maindec
 					Branch 		<= 1'b0;
 					ALUOp 		<= 2'b10;
 					ERet		<= 1'b0;
-					EStatus 	<= 4'b0000;
 					NotAnInstr	<= 1'b0;
 					
 				end
 				
+				// ERET
+				11'110_1011_0100: begin   
+					Reg2Loc 	<= 1'b0;
+					ALUSrc 		<= 2'b00;
+					MemtoReg 	<= 1'bx;
+					RegWrite 	<= 1'b0;
+					MemRead 	<= 1'b0;
+					MemWrite 	<= 1'b0;
+					Branch 		<= 1'b1;
+					ALUOp 		<= 2'b01;
+					ERet		<= 1'b1;
+					NotAnInstr	<= 1'b0;
+				end
 				
+				// MRS
+				11'110_1010_1001: begin   
+					Reg2Loc 	<= 1'b1;
+					ALUSrc 		<= 2'b1x;
+					MemtoReg 	<= 1'b0;
+					RegWrite 	<= 1'b1;
+					MemRead 	<= 1'b0;
+					MemWrite 	<= 1'b0;
+					Branch 		<= 1'b0;
+					ALUOp 		<= 2'bxx;
+					ERet		<= 1'b0;
+					NotAnInstr	<= 1'b0;	
+				end
 				
+				// BR
+				11'110_1011_0000: begin   
+					Reg2Loc 	<= 1'b;
+					ALUSrc 		<= 2'b;
+					MemtoReg 	<= 1'b;
+					RegWrite 	<= 1'b;
+					MemRead 	<= 1'b;
+					MemWrite 	<= 1'b;
+					Branch 		<= 1'b1;
+					ALUOp 		<= 2'b;
+					ERet		<= 1'b;
+					NotAnInstr	<= 1'b;	
+				end	
 				
 				// INVALID OPCODE
 				default: begin 
@@ -105,7 +139,6 @@ module maindec
 					Branch 		<= 1'b0;
 					ALUOp 		<= 2'bxx;
 					ERet		<= 1'b0;
-					EStatus 	<= 4'b0010;
 					NotAnInstr	<= 1'b1;
 				end
 			
