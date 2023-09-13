@@ -4,14 +4,16 @@ module controller
 (
 	input logic [10:0] instr,
 	output logic [3:0] AluControl,						
-	output logic reg2loc, regWrite, Branch, memtoReg, memRead, memWrite,
+	output logic reg2loc, regWrite, Branch, memtoReg, memRead, memWrite, 
 	
 	
 	// Señales nuevas
 	input logic reset, ExtIRQ, ExcAck,
-	output logic ExtIAck, ERet, Exc,
+	output logic ExtIAck, ERet, Exc, BranchToReg,
 	output logic [3:0] EStatus,
-	output logic [1:0] AluSrc // modificada
+	// modificada
+	output logic [1:0] AluSrc 
+	
 );
 	logic NotAnInstr; // Señales nuevas							
 	logic [1:0] AluOp_s; 
@@ -28,21 +30,19 @@ module controller
 		.ALUOp(AluOp_s),
 		.ALUSrc(AluSrc), 
 		.NotAnInstr(NotAnInstr),
-		.ERet(ERet)
+		.ERet(ERet),
+		.BranchToReg(BranchToReg)
 	);
 	
 	aludec decAlu (
 		.funct(instr), 
 		.aluop(AluOp_s), 
-		.alucontrol(AluControl)
+		.alucontrol(AluControl),
+		.reset(reset)
 	);
 			
-	
-	
-	assign Exc = (ExtIRQ || NotAnInstr);
-	
-	assign ExtIAck = (ExcAck && ExtIRQ) ? 1 : 0;
-	
+	assign Exc = ((ExtIRQ | NotAnInstr) & ~reset );
+	assign ExtIAck = ExcAck & ExtIRQ  & ~reset;
 	
 	always_comb begin 
 		

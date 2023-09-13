@@ -3,10 +3,10 @@
 module maindec
 (
 		input logic [10:0] Op,
-		input logic reset, // nuevo
+		input logic reset, 							// nuevo
 		output logic Reg2Loc, MemtoReg, RegWrite, MemRead, MemWrite, Branch, 
-		output logic NotAnInstr, ERet, // nuevo
-		output logic [1:0] ALUOp, ALUSrc // modificado
+		output logic NotAnInstr, ERet, BranchToReg, // nuevo
+		output logic [1:0] ALUOp, ALUSrc 			// modificado
 );
 
 	always_comb begin	
@@ -18,6 +18,7 @@ module maindec
 			MemRead 	<= 1'b0;
 			MemWrite 	<= 1'b0;
 			Branch 		<= 1'b0;
+			BranchToReg <= 1'b0;
 			ALUOp 		<= 2'b00;
 			ALUSrc		<= 2'b00;
 			ERet		<= 1'b0;
@@ -37,6 +38,7 @@ module maindec
 					MemRead 	<= 1'b1;
 					MemWrite 	<= 1'b0;
 					Branch 		<= 1'b0;
+					BranchToReg <= 1'b0;
 					ALUOp 		<= 2'b00;
 					ERet		<= 1'b0;
 					NotAnInstr	<= 1'b0;
@@ -51,6 +53,7 @@ module maindec
 					MemRead 	<= 1'b0;
 					MemWrite 	<= 1'b1;
 					Branch 		<= 1'b0;
+					BranchToReg <= 1'b0;
 					ALUOp 		<= 2'b00;
 					ERet		<= 1'b0;
 					NotAnInstr	<= 1'b0;
@@ -65,6 +68,7 @@ module maindec
 					MemRead 	<= 1'b0;
 					MemWrite 	<= 1'b0;
 					Branch 		<= 1'b1;
+					BranchToReg <= 1'b0;
 					ALUOp 		<= 2'b01;
 					ERet		<= 1'b0;
 					NotAnInstr	<= 1'b0;
@@ -80,14 +84,14 @@ module maindec
 					MemRead 	<= 1'b0;
 					MemWrite 	<= 1'b0;
 					Branch 		<= 1'b0;
+					BranchToReg <= 1'b0;
 					ALUOp 		<= 2'b10;
 					ERet		<= 1'b0;
 					NotAnInstr	<= 1'b0;
-					
 				end
 				
 				// ERET
-				11'110_1011_0100: begin   
+				11'b110_1011_0100: begin   
 					Reg2Loc 	<= 1'b0;
 					ALUSrc 		<= 2'b00;
 					MemtoReg 	<= 1'bx;
@@ -95,13 +99,14 @@ module maindec
 					MemRead 	<= 1'b0;
 					MemWrite 	<= 1'b0;
 					Branch 		<= 1'b1;
+					BranchToReg <= 1'b0;
 					ALUOp 		<= 2'b01;
 					ERet		<= 1'b1;
 					NotAnInstr	<= 1'b0;
 				end
 				
 				// MRS
-				11'110_1010_1001: begin   
+				11'b110_1010_1001: begin   
 					Reg2Loc 	<= 1'b1;
 					ALUSrc 		<= 2'b1x;
 					MemtoReg 	<= 1'b0;
@@ -109,23 +114,25 @@ module maindec
 					MemRead 	<= 1'b0;
 					MemWrite 	<= 1'b0;
 					Branch 		<= 1'b0;
+					BranchToReg <= 1'b0;
 					ALUOp 		<= 2'bxx;
 					ERet		<= 1'b0;
 					NotAnInstr	<= 1'b0;	
 				end
 				
 				// BR
-				11'110_1011_0000: begin   
-					Reg2Loc 	<= 1'b;
-					ALUSrc 		<= 2'b;
-					MemtoReg 	<= 1'b;
-					RegWrite 	<= 1'b;
-					MemRead 	<= 1'b;
-					MemWrite 	<= 1'b;
-					Branch 		<= 1'b1;
-					ALUOp 		<= 2'b;
-					ERet		<= 1'b;
-					NotAnInstr	<= 1'b;	
+				11'b110_1011_0000: begin   		// CBZ
+					Reg2Loc 	<= 1'bx;		// 1
+					ALUSrc 		<= 2'bxx;		// 00
+					MemtoReg 	<= 1'bx;		// x
+					RegWrite 	<= 1'b0;		// 0
+					MemRead 	<= 1'b0;		// 0
+					MemWrite 	<= 1'b0;		// 0
+					Branch 		<= 1'b1;		// 1
+					BranchToReg <= 1'b1;		// 0
+					ALUOp 		<= 2'b01;		// 01
+					ERet		<= 1'b0;		// 0
+					NotAnInstr	<= 1'b0;		// 0
 				end	
 				
 				// INVALID OPCODE
@@ -137,6 +144,7 @@ module maindec
 					MemRead 	<= 1'b0;
 					MemWrite 	<= 1'b0;
 					Branch 		<= 1'b0;
+					BranchToReg <= 1'b0;
 					ALUOp 		<= 2'bxx;
 					ERet		<= 1'b0;
 					NotAnInstr	<= 1'b1;

@@ -11,7 +11,8 @@ module datapath
 	input logic memRead,
 	input logic memWrite,
 	input logic regWrite,
-	input logic memtoReg,				  
+	input logic memtoReg,			
+	input logic BranchToReg,	
 	input logic [31:0] IM_readData,
 	input logic [N-1:0] DM_readData,
 	input logic [3:0] EStatus,
@@ -56,6 +57,7 @@ module datapath
 	execute #(64) EXECUTE (
 		.AluSrc(AluSrc),
 		.AluControl(AluControl),
+		.BranchToReg(BranchToReg),
 		.PC_E(IM_addr),
 		.signImm_E(signImm),
 		.readData1_E(readData1),
@@ -69,6 +71,7 @@ module datapath
 
 	memory MEMORY (
 		.Branch_M(Branch),
+		.BranchToReg(BranchToReg),
 		.zero_M(zero),
 		.PCSrc_M(PCSrc)
 	);
